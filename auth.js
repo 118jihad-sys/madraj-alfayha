@@ -5,7 +5,7 @@ const $=s=>document.querySelector(s),e=s=>String(s??'').replace(/[&<>"]/g,c=>({'
 const B='https://www.gstatic.com/firebasejs/10.12.2/';
 const ER={'auth/invalid-credential':'البريد أو كلمة المرور غير صحيحة','auth/email-already-in-use':'هذا البريد مسجّل مسبقًا','auth/weak-password':'كلمة المرور ضعيفة (6 أحرف على الأقل)','auth/invalid-email':'البريد غير صالح','auth/too-many-requests':'محاولات كثيرة، حاول لاحقًا','permission-denied':'لا تملك صلاحية الحفظ — راجع قواعد Firestore'};
 let F,U=null,D={},tab='news',edit=-1,mode='login';
-const fb=()=>F||(F=(async()=>{const[a,au,fs]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);const app=a.initializeApp(cfg);return{au,fs,auth:au.getAuth(app),db:fs.getFirestore(app)}})());
+const fb=()=>F||(F=(async()=>{const[a,au,fs]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);const app=a.initializeApp(cfg),auth=au.getAuth(app);await au.setPersistence(auth,au.browserLocalPersistence);return{au,fs,auth,db:fs.getFirestore(app)}})());
 const dfmt=d=>new Date(d+'T12:00:00').toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'long',year:'numeric'});
 async function load(){const f=await fb(),s=await f.fs.getDoc(f.fs.doc(f.db,'site','data'));return s.exists()?JSON.parse(s.data().json):null}
 
@@ -16,7 +16,7 @@ window.siteReady=(async()=>{if(!cfg.projectId)return;try{const r=await Promise.r
 $('header.top').insertAdjacentHTML('beforebegin','<div class="utl"><div class="wrap"><button id="lg" type="button">دخول / تسجيل</button></div></div>');
 const dlg=document.createElement('dialog');dlg.id='ad';document.body.appendChild(dlg);
 const isAdm=()=>U&&U.emailVerified&&U.email.toLowerCase()===ADM;
-const lbl=()=>{$('#lg').textContent=U?(isAdm()?'لوحة التحكم':'حسابي'):'دخول / تسجيل'};
+const lbl=()=>{$('#lg').textContent=U?(isAdm()?'تعديل':'حسابي'):'دخول / تسجيل'};
 if(cfg.projectId)fb().then(f=>f.au.onAuthStateChanged(f.auth,u=>{U=u;lbl();if(dlg.open)draw()}));
 $('#lg').onclick=()=>{draw();dlg.showModal()};
 dlg.addEventListener('click',ev=>{if(ev.target===dlg)dlg.close()});
@@ -39,7 +39,7 @@ function draw(){
 /* لوحة التحكم */
 const T={news:'الأخبار',stand:'الترتيب',match:'المباريات'};
 function panel(){
- return `<h3>لوحة التحكم</h3><div class="tabs">${Object.keys(T).map(k=>`<button class="${k===tab?'on':''}" data-a="tab" data-v="${k}">${T[k]}</button>`).join('')}<button data-a="out">خروج</button></div>${tab==='news'?pNews():tab==='stand'?pStand():pMatch()}<p id="msg" class="msg"></p>`;
+ return `<h3>لوحة التحكم</h3><div class="tabs">${Object.keys(T).map(k=>`<button class="${k===tab?'on':''}" data-a="tab" data-v="${k}">${T[k]}</button>`).join('')}<button data-a="close">إغلاق</button></div>${tab==='news'?pNews():tab==='stand'?pStand():pMatch()}<p id="msg" class="msg"></p>`;
 }
 function pNews(){
  const n=D.news[edit]||{c:'match',tag:'',d:new Date().toISOString().slice(0,10),t:'',x:'',l:'',lt:''};
@@ -70,7 +70,7 @@ dlg.addEventListener('click',async ev=>{
  if(a==='treg'||a==='tlogin'){mode=a==='treg'?'reg':'login';return draw()}
  const f=await fb();
  try{
-  if(a==='dologin'){await f.au.signInWithEmailAndPassword(f.auth,v('em'),$('#pw').value)}
+  if(a==='dologin'){const c=await f.au.signInWithEmailAndPassword(f.auth,v('em'),$('#pw').value);if(c.user.emailVerified&&c.user.email.toLowerCase()===ADM)dlg.close()}
   else if(a==='doreg'){const c=await f.au.createUserWithEmailAndPassword(f.auth,v('em'),$('#pw').value);await f.au.sendEmailVerification(c.user);say('تم إنشاء الحساب. أرسلنا رسالة تفعيل إلى بريدك.')}
   else if(a==='forgot'){if(!v('em'))return say('اكتب بريدك أولًا');await f.au.sendPasswordResetEmail(f.auth,v('em'));say('أرسلنا رابط استعادة كلمة المرور إلى بريدك.')}
   else if(a==='out'){await f.au.signOut(f.auth);dlg.close()}
