@@ -112,6 +112,6 @@ dlg.addEventListener('click',async ev=>{
 });
 
 /* فتح اللوحة: تحضير البيانات الحالية */
-$('#lg').addEventListener('click',()=>{D=Object.assign({news:JSON.parse(JSON.stringify(NEWS)),standing:{pos:12,pts:6,p:7,gf:7,ga:11,w:1,d:3,l:3},matches:{},squad:JSON.parse(JSON.stringify(window.DEFAULT_SQUAD||[]))},window.remote||{});draw()},true);
+$('#lg').addEventListener('click',()=>{edit=-1;editPlayer=-1;D=Object.assign({news:JSON.parse(JSON.stringify(NEWS)),standing:{pos:12,pts:6,p:7,gf:7,ga:11,w:1,d:3,l:3},matches:{},squad:JSON.parse(JSON.stringify(window.DEFAULT_SQUAD||[]))},window.remote||{});draw()},true);
 })();
 
