@@ -222,8 +222,9 @@ footer a{color:var(--or2);text-decoration:underline}
 .mono{aspect-ratio:1}
 
 /* V7 · حساب + لوحة تحكم */
-.utl{background:#070f28;padding:4px 0}.utl .wrap{display:flex}
+.utl{background:#070f28;padding:4px 0}.utl .wrap{display:flex;align-items:center}.account-actions{display:flex;align-items:center;gap:8px}
 #lg{color:#dfe5ff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}#lg:hover{background:var(--or);border-color:var(--or);color:#fff}
+#role-badge{color:#ffb35c;font-size:11px;font-weight:800;padding:3px 10px;border:1px solid rgba(255,179,92,.38);border-radius:999px}
 #ad{border:0;border-radius:20px;padding:0;width:min(760px,94vw);max-height:90vh;background:#fff;color:var(--ink)}#ad::backdrop{background:rgba(7,15,40,.7)}
 .adp{padding:24px;display:grid;gap:12px;font-family:inherit}.adp .x{justify-self:start;color:var(--mut);font-weight:800}
 .adp h3{color:var(--navy);font-size:22px}.adp input,.adp select,.adp textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit}
