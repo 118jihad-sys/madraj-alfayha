@@ -79,15 +79,18 @@ const squad=[
  {n:'ريان عناد',p:'fwd',pos:'جناح أيمن',no:'77',id:1780605},
  {n:'سلطان الجابري',p:'fwd',pos:'جناح أيمن',no:'27',id:1920081},
  {n:'فهد ماجد الحبيشي',p:'fwd',pos:'جناح أيمن',no:'43',id:2139541},
- {n:'عمار الخيبري',p:'fwd',pos:'جناح أيمن',no:'41',id:1819089,inj:'إصابة الرباط الصليبي · غياب 6–9 أشهر (إعلان النادي 9 يونيو 2026)'}
+ {n:'عمار الخيبري',p:'fwd',pos:'جناح أيمن',no:'41',id:1819089,injuryType:'إصابة الرباط الصليبي',injuryDuration:'6–9 أشهر'}
 ];
+if(Array.isArray(R.squad)){squad.splice(0,squad.length,...R.squad)}
+window.DEFAULT_SQUAD=squad;
+const injuryText=p=>[p.injuryType,p.injuryDuration&&`المدة: ${p.injuryDuration}`].filter(Boolean).join(' · ')||p.inj||'';
 const products=[
  ['تيشيرت الجمهور البرتقالي','orange.png','https://alfiha-store.com/products/تيشرت-الفريق-الأول-البرتقالي-فئة-الجمهور-2026-2027-1'],
  ['تيشيرت الجمهور الكحلي','navy.png','https://alfiha-store.com/products/تيشرت-الفريق-الأول-البرتقالي-فئة-الجمهور-2026-2027'],
  ['تيشيرت الجمهور الأبيض','white.png','https://alfiha-store.com/products/تيشرت-الفريق-الأول-البرتقالي-فئة-الجمهور-2026-2027-2']
 ];
 /* ===== الدوال ===== */
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmLogo=i=>`https://images.fotmob.com/image_resources/logo/teamlogo/${i}.png`;
 const badge=(id,c='badge')=>{const T=teams[id];return `<img class="${c}" src="${T.logo||fmLogo(T.fm)}" data-fm="${T.fm||''}" data-n="${T.name[0]}" alt="شعار ${T.name}">`};
 const t=id=>teams[id].name;
@@ -125,15 +128,16 @@ function drawNews(k){
  $('#news-grid').innerHTML=L.map((n,i)=>`<article class="nc${i===0?' big':''}"><div class="top2"><span class="ntag">${n.tag}</span><time datetime="${n.d}">${n.da}</time></div><h3>${n.t}</h3><p>${n.x}</p><a href="${n.l}" target="_blank" rel="noopener">${n.lt} ↗</a></article>`).join('')||'<div class="empty">لا توجد أخبار في هذا القسم بعد.</div>';
 }
 drawNews('all');
-$('#products').innerHTML=products.map(p=>`<article class="pd"><div class="im"><span>فئة الجمهور</span><img src="${p[1]}" alt="${p[0]} موسم 2026–2027" loading="lazy"></div><div class="in"><h3>${p[0]}</h3><small style="color:var(--mut);font-weight:700">موسم 2026–2027</small><div class="pr"><b>56.35 <small style="color:var(--mut)">ر.س</small></b><small>غير متوفر حاليًا</small></div><a class="btn line sm" href="${p[2]}" target="_blank" rel="noopener">عرضه في المتجر ↗</a></div></article>`).join('');
+$('#products').innerHTML=products.map(p=>`<article class="pd"><div class="im"><span>فئة الجمهور</span><img src="${p[1]}" alt="${p[0]} موسم 2026–2027" loading="lazy"></div><div class="in"><h3>${p[0]}</h3><small style="color:var(--mut);font-weight:700">موسم 2026–2027</small><div class="pr"><b>56.35 <small style="color:var(--mut)">ر.س</small></b><small style="color:#16834a">متوفر الآن</small></div><a class="btn line sm" href="${p[2]}" target="_blank" rel="noopener">عرضه في المتجر ↗</a></div></article>`).join('');
 /* squad */
 const G={all:'الكل',gk:'حراس',def:'دفاع',mid:'وسط',fwd:'هجوم'};
 function drawSquad(k){
  $('#chips').innerHTML=Object.keys(G).map(x=>`<button class="chip${x===k?' on':''}" data-f="${x}" aria-pressed="${x===k}">${G[x]}<small>${x==='all'?squad.length:squad.filter(p=>p.p===x).length}</small></button>`).join('');
- $('#squad-grid').innerHTML=squad.filter(p=>k==='all'||p.p===k).map(p=>`<article class="pc"><div class="ph" data-i="${p.no||p.n[0]}"><span class="no">${p.no}</span><img src="https://images.fotmob.com/image_resources/playerimages/${p.id}.png" alt="${p.n}" loading="lazy"></div>${p.no?`<span class="num">${p.no}</span>`:''}${p.cap?'<span class="cap">القائد</span>':''}${p.inj?`<span class="inj" title="${p.inj}">مصاب</span>`:''}<div class="nm"><b>${p.n}</b><small>${p.pos}</small>${p.inj?`<small style="display:block;color:var(--loss);font-weight:700">${p.inj}</small>`:''}</div></article>`).join('');
+ $('#squad-grid').innerHTML=squad.filter(p=>k==='all'||p.p===k).map(p=>{const injury=injuryText(p),rawPhoto=p.image||(p.id?`https://images.fotmob.com/image_resources/playerimages/${p.id}.png`:''),photo=/^https:\/\//i.test(rawPhoto)?rawPhoto:'',name=String(p.n||'');return `<article class="pc"><div class="ph" data-i="${esc(p.no||name[0]||'')}"><span class="no">${esc(p.no||'')}</span>${photo?`<img src="${esc(photo)}" alt="${esc(name)}" loading="lazy">`:`<span class="placeholder">${esc(name[0]||'؟')}</span>`}</div>${p.no?`<span class="num">${esc(p.no)}</span>`:''}${p.cap?'<span class="cap">القائد</span>':''}${injury?`<span class="inj" title="${esc(injury)}">مصاب</span>`:''}<div class="nm"><b>${esc(name)}</b><small>${esc(p.pos||'')}</small>${injury?`<small style="display:block;color:var(--loss);font-weight:700">${esc(injury)}</small>`:''}</div></article>`}).join('');
 }
 drawSquad('all');
-$('#squad-count').textContent=`${squad.length} لاعبًا · ${squad.filter(p=>p.inj).length} مصاب`;
+$('#squad-count').textContent=`${squad.length} لاعبًا · ${squad.filter(p=>injuryText(p)).length} مصاب`;
+window.refreshSquad=()=>{drawSquad('all');$('#squad-count').textContent=`${squad.length} لاعبًا · ${squad.filter(p=>injuryText(p)).length} مصاب`};
 /* modal */
 const dlg=$('#dlg');
 const events=m=>!m.goals.length?'<div class="empty">انتهت المباراة بدون أهداف.</div>':`<div class="ev">${m.goals.map(g=>`<div><span class="min">${g.minute}′</span><span><b>${g.scorer}</b>${g.penalty?'<small>ركلة جزاء</small>':g.og?'<small>هدف عكسي</small>':g.assist?`<small>صناعة: ${g.assist}</small>`:''}</span><em>${t(g.team)}</em></div>`).join('')}</div>`;

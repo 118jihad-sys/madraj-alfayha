@@ -160,6 +160,7 @@ section{padding:56px 0 8px}
 .pc:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--or)}
 .pc .ph{height:190px;background:linear-gradient(180deg,#e9edf9,#d5ddf1);position:relative;display:grid;place-items:end center;overflow:hidden}
 .pc .ph img{height:100%;width:100%;object-fit:contain;object-position:bottom;position:relative;z-index:1}
+.pc .ph .placeholder{align-self:center;justify-self:center;width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-size:36px;font-weight:800}
 .pc .ph .no{position:absolute;top:2px;right:8px;font-size:78px;font-weight:800;color:rgba(11,22,56,.09);line-height:1}
 .pc.nophoto .ph img{display:none}
 .pc.nophoto .ph:after{content:"";position:absolute;inset:0;background:url(logo.png) center 62%/44% no-repeat;opacity:.3}
