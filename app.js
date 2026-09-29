@@ -1,3 +1,4 @@
+(async()=>{await window.siteReady;
 const teams = {
  fayha:{name:'الفيحاء',logo:'logo.png'},riyadh:{name:'الرياض',logo:'assets/riyadh.png'},khaleej:{name:'الخليج',logo:'assets/khaleej.png'},ahli:{name:'الأهلي',logo:'assets/ahli.png'},hazem:{name:'الحزم',logo:'assets/hazem.png'},shabab:{name:'الشباب',logo:'assets/shabab.png'},ittihad:{name:'الاتحاد',logo:'assets/ittihad.png'},kholood:{name:'الخلود',logo:'assets/kholood.png'}
 };
@@ -45,6 +46,8 @@ Object.assign(matches,{
 });
 const kick={riyadh:'2026-10-11T16:40',khaleej:'2026-10-15T17:50',ahli:'2026-10-19T18:05',hazem:'2026-10-22T16:40',faisaly:'2026-10-31T17:55'};
 const UP=Object.keys(kick),PREV=['shabab','ittihad','kholood','abha','taawoun'];
+const R=window.remote||{};Object.entries(R.matches||{}).forEach(([i,v])=>{if(matches[i]){Object.assign(matches[i],v.m||{});if(v.k)kick[i]=v.k}});window.SITE={matches,kick,UP};
+const S=Object.assign({pos:12,pts:6,p:7,gf:7,ga:11,w:1,d:3,l:3},R.standing||{});
 const leaders={goals:[['هوغو مورا','moura',2],['لازارو فينيسيوس','lazaro',2]],assists:[['نواف الحارثي','nawaf',1],['لازارو فينيسيوس','lazaro',1],['أحمد بامسعود','bamsaud',1]]};
 const squad=[
  {n:'عبدالرؤوف الدقيل',p:'gk',pos:'حارس مرمى',no:'1',id:1554630},
@@ -110,9 +113,9 @@ const next=UP.find(i=>when(i)>Date.now())||UP[UP.length-1];
 /* upcoming + results */
 $('#upcoming').innerHTML=UP.map(id=>{const m=matches[id];return `<button class="fx" data-m="${id}"><div class="m"><span>الجولة ${m.round}${id===next?' · التالية':''}</span><span>${m.date}</span></div>${pair(m)}<div class="f"><span>${m.stadium}</span><span>التفاصيل ↗</span></div></button>`}).join('');
 $('#results').innerHTML=PREV.map(id=>{const m=matches[id],s=st(m);return `<button class="rc" data-m="${id}"><div class="m"><span>الجولة ${m.round} · ${m.date}</span><span class="tag ${s[0]}">${s[1]}</span></div>${pair(m)}<div class="f" style="margin-top:10px;font-size:12px;color:var(--mut);font-weight:700">الأهداف والتفاصيل ↗</div></button>`}).join('');
-$('#side').innerHTML=`<div class="card stand"><h3>ترتيب الفيحاء في دوري روشن</h3><div class="pos"><b>12</b><span>المركز من 18 فريقًا<br>6 نقاط بعد 7 جولات</span></div>
-<div class="stats4"><div><b>7</b><small>لعب</small></div><div><b>7</b><small>له</small></div><div><b>11</b><small>عليه</small></div><div><b>−4</b><small>الفارق</small></div></div>
-<table class="mini"><tr><td>11</td><td>الرياض</td><td>8</td></tr><tr class="me"><td>12</td><td>الفيحاء</td><td>6</td></tr><tr><td>13</td><td>الخليج</td><td>5</td></tr></table><p class="note" style="color:#9fb0e6">1 فوز · 3 تعادل · 3 خسائر. الترتيب بتاريخ 27 سبتمبر 2026.</p></div>
+$('#side').innerHTML=`<div class="card stand"><h3>ترتيب الفيحاء في دوري روشن</h3><div class="pos"><b>${S.pos}</b><span>المركز من 18 فريقًا<br>${S.pts} نقاط بعد ${S.p} جولات</span></div>
+<div class="stats4"><div><b>${S.p}</b><small>لعب</small></div><div><b>${S.gf}</b><small>له</small></div><div><b>${S.ga}</b><small>عليه</small></div><div><b>${S.gf-S.ga>0?"+":""}${S.gf-S.ga}</b><small>الفارق</small></div></div>
+${R.standing?"":'<table class="mini"><tr><td>11</td><td>الرياض</td><td>8</td></tr><tr class="me"><td>12</td><td>الفيحاء</td><td>6</td></tr><tr><td>13</td><td>الخليج</td><td>5</td></tr></table>'}<p class="note" style="color:#9fb0e6">${S.w} فوز · ${S.d} تعادل · ${S.l} خسائر.${R.standing?"":" الترتيب بتاريخ 27 سبتمبر 2026."}</p></div>
 <div class="card"><h3>هدافو الفريق</h3><div class="lead">${leaders.goals.map(p=>`<figure><img src="assets/${p[1]}.png" alt="${p[0]}">${p[0]}<b>${p[2]} هدف</b></figure>`).join('')}</div><h3 style="margin-top:18px">الأكثر صناعة</h3><div class="lead">${leaders.assists.map(p=>`<figure><img src="assets/${p[1]}.png" alt="${p[0]}">${p[0]}<b>${p[2]} تمريرة</b></figure>`).join('')}</div><p class="note">إحصاءات الدوري حتى 27 سبتمبر 2026.</p></div>`;
 /* news, store */
 const NC={all:'الكل',match:'المباريات',train:'التمارين والجاهزية',transfer:'الانتقالات'};
@@ -168,3 +171,6 @@ document.addEventListener('error',e=>{
  if(im.dataset.fm&&!im.dataset.tried){im.dataset.tried=1;im.src=fmLogo(im.dataset.fm);return}
  const sp=document.createElement('span');sp.className=(im.className+' mono').trim();sp.textContent=im.dataset.n;sp.setAttribute('role','img');sp.setAttribute('aria-label',im.alt);im.replaceWith(sp);
 },true);
+
+})();
+

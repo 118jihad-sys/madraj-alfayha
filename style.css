@@ -220,3 +220,18 @@ footer a{color:var(--or2);text-decoration:underline}
 .xcard p{color:var(--mut);font-size:14px;max-width:640px}
 .ng .empty{grid-column:1/-1}
 .mono{aspect-ratio:1}
+
+/* V7 · حساب + لوحة تحكم */
+.utl{background:#070f28;padding:4px 0}.utl .wrap{display:flex}
+#lg{color:#dfe5ff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}#lg:hover{background:var(--or);border-color:var(--or);color:#fff}
+#ad{border:0;border-radius:20px;padding:0;width:min(760px,94vw);max-height:90vh;background:#fff;color:var(--ink)}#ad::backdrop{background:rgba(7,15,40,.7)}
+.adp{padding:24px;display:grid;gap:12px;font-family:inherit}.adp .x{justify-self:start;color:var(--mut);font-weight:800}
+.adp h3{color:var(--navy);font-size:22px}.adp input,.adp select,.adp textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit}
+.adp label{display:grid;gap:4px;font-size:13px;font-weight:700;color:var(--mut)}.adp .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.adp .hint,.adp .msg{font-size:13px;color:var(--mut)}.adp .msg{font-weight:700;color:var(--or)}.adp a[data-a]{color:var(--navy3);font-weight:700;cursor:pointer}
+.adp .tabs{display:flex;gap:6px;flex-wrap:wrap}.adp .tabs button{padding:7px 16px;border-radius:999px;background:var(--bg);font-weight:800;font-size:14px}.adp .tabs .on{background:var(--navy);color:#fff}
+.adp .it{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:700}.adp .it small{color:var(--mut);display:block}
+.adp .it button{color:var(--navy3);font-weight:800;font-size:13px;margin-inline-start:8px}.adp .it .del{color:var(--loss)}
+.adp .list{display:grid;gap:8px;max-height:260px;overflow:auto}
+@media(max-width:560px){.adp .g2{grid-template-columns:1fr}}
+
