@@ -10,7 +10,14 @@ const dfmt=d=>new Date(d+'T12:00:00').toLocaleDateString('ar-SA-u-ca-gregory-nu-
 async function load(){const f=await fb(),[s,n]=await Promise.all([f.fs.getDoc(f.fs.doc(f.db,'site','data')),f.fs.getDoc(f.fs.doc(f.db,'site','news'))]);const d=s.exists()?JSON.parse(s.data().json):{};if(n.exists())d.news=JSON.parse(n.data().json);return Object.keys(d).length?d:null}
 
 /* بيانات الموقع: تُقرأ قبل رسم الصفحة (بحد أقصى 3 ثوانٍ ثم يُعرض المحتوى الافتراضي) */
-window.siteReady=(async()=>{if(!cfg.projectId)return;try{const r=await Promise.race([load(),new Promise((_,j)=>setTimeout(j,3000))]);if(r){window.remote=r;if(r.news){NEWS.length=0;NEWS.push(...r.news)}}}catch(x){}})();
+window.siteReady=(async()=>{if(!cfg.projectId)return;try{const r=await Promise.race([load(),new Promise((_,j)=>setTimeout(j,3000))]);if(r){window.remote=r;if(Array.isArray(r.news)){
+ const minDate=NEWS.reduce((min,n)=>n.d<min?n.d:min,NEWS[0].d);
+ const merged=[...NEWS,...r.news].filter(n=>n&&n.d>=minDate);
+ const seen=new Set();
+ const fresh=merged.filter(n=>{const key=n.d+'|'+n.t;if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>b.d.localeCompare(a.d));
+ NEWS.splice(0,NEWS.length,...fresh);
+ r.news=fresh;
+}}}catch(x){}})();
 
 /* واجهة */
 $('header.top').insertAdjacentHTML('beforebegin','<div class="utl"><div class="wrap"><div class="account-actions"><button id="lg" type="button">دخول / تسجيل</button><span id="role-badge">زائر</span></div></div></div>');
