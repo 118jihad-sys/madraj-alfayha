@@ -127,6 +127,8 @@ section{padding:56px 0 8px}
 .nc h3{font-size:19px;font-weight:800;line-height:1.35}
 .nc p{color:var(--mut);font-size:14.5px;flex:1}
 .nc a{font-weight:800;font-size:13px;color:var(--or)}
+.nc .nphoto{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:var(--bg)}
+.nc.big .nphoto{aspect-ratio:2/1}
 /* tickets */
 .tk{margin-top:56px;border-radius:26px;padding:38px clamp(22px,5vw,56px);background:linear-gradient(120deg,var(--or),#ff9a3d);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;box-shadow:0 18px 40px rgba(255,122,26,.3)}
 .tk h2{font-size:clamp(26px,4vw,38px);font-weight:800}
@@ -236,4 +238,5 @@ footer a{color:var(--or2);text-decoration:underline}
 .adp .it button{color:var(--navy3);font-weight:800;font-size:13px;margin-inline-start:8px}.adp .it .del{color:var(--loss)}
 .adp .list{display:grid;gap:8px;max-height:260px;overflow:auto}
 @media(max-width:560px){.adp .g2{grid-template-columns:1fr}}
+
 

@@ -14,7 +14,7 @@ window.siteReady=(async()=>{if(!cfg.projectId)return;try{const r=await Promise.r
  const minDate=NEWS.reduce((min,n)=>n.d<min?n.d:min,NEWS[0].d);
  const merged=[...NEWS,...r.news].filter(n=>n&&n.d>=minDate);
  const seen=new Set();
- const fresh=merged.filter(n=>{const key=n.d+'|'+n.t;if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>b.d.localeCompare(a.d));
+ const fresh=merged.filter(n=>{const key=n.d+'|'+n.t;if(seen.has(key))return false;seen.add(key);return true}).sort((a,b)=>b.d.localeCompare(a.d)).slice(0,10);
  NEWS.splice(0,NEWS.length,...fresh);
  r.news=fresh;
 }}}catch(x){}})();
@@ -121,4 +121,5 @@ dlg.addEventListener('click',async ev=>{
 /* فتح اللوحة: تحضير البيانات الحالية */
 $('#lg').addEventListener('click',()=>{edit=-1;editPlayer=-1;D=Object.assign({news:JSON.parse(JSON.stringify(NEWS)),standing:{pos:12,pts:6,p:7,gf:7,ga:11,w:1,d:3,l:3},matches:{},squad:JSON.parse(JSON.stringify(window.DEFAULT_SQUAD||[]))},window.remote||{});draw()},true);
 })();
+
 

@@ -123,9 +123,10 @@ ${R.standing?"":'<table class="mini"><tr><td>11</td><td>الرياض</td><td>8</
 /* news, store */
 const NC={all:'الكل',match:'المباريات',train:'التمارين والجاهزية',transfer:'الانتقالات'};
 function drawNews(k){
- $('#nchips').innerHTML=Object.keys(NC).map(x=>`<button class="chip${x===k?' on':''}" data-nf="${x}" aria-pressed="${x===k}">${NC[x]}<small>${x==='all'?NEWS.length:NEWS.filter(n=>n.c===x).length}</small></button>`).join('');
- const L=NEWS.filter(n=>k==='all'||n.c===k).sort((a,b)=>b.d.localeCompare(a.d));
- $('#news-grid').innerHTML=L.map((n,i)=>`<article class="nc${i===0?' big':''}"><div class="top2"><span class="ntag">${n.tag}</span><time datetime="${n.d}">${n.da}</time></div><h3>${n.t}</h3><p>${n.x}</p><a href="${n.l}" target="_blank" rel="noopener">${n.lt} ↗</a></article>`).join('')||'<div class="empty">لا توجد أخبار في هذا القسم بعد.</div>';
+ const latest=NEWS.slice().sort((a,b)=>b.d.localeCompare(a.d)).slice(0,10);
+ $('#nchips').innerHTML=Object.keys(NC).map(x=>`<button class="chip${x===k?' on':''}" data-nf="${x}" aria-pressed="${x===k}">${NC[x]}<small>${x==='all'?latest.length:latest.filter(n=>n.c===x).length}</small></button>`).join('');
+ const L=latest.filter(n=>k==='all'||n.c===k);
+ $('#news-grid').innerHTML=L.map((n,i)=>{const photo=/^https:\/\/(?:www\.)?alfayhasc\.com\/storage\//i.test(n.img||'')?`<img class="nphoto" src="${esc(n.img)}" alt="${esc(n.t)}" loading="lazy">`:'';return `<article class="nc${i===0?' big':''}">${photo}<div class="top2"><span class="ntag">${n.tag}</span><time datetime="${n.d}">${n.da}</time></div><h3>${n.t}</h3><p>${n.x}</p><a href="${n.l}" target="_blank" rel="noopener">${n.lt} ↗</a></article>`}).join('')||'<div class="empty">لا توجد أخبار في هذا القسم بعد.</div>';
 }
 drawNews('all');
 $('#products').innerHTML=products.map(p=>`<article class="pd"><div class="im"><span>فئة الجمهور</span><img src="${p[1]}" alt="${p[0]} موسم 2026–2027" loading="lazy"></div><div class="in"><h3>${p[0]}</h3><small style="color:var(--mut);font-weight:700">موسم 2026–2027</small><div class="pr"><b>56.35 <small style="color:var(--mut)">ر.س</small></b><small style="color:#16834a">متوفر الآن</small></div><a class="btn line sm" href="${p[2]}" target="_blank" rel="noopener">عرضه في المتجر ↗</a></div></article>`).join('');
@@ -177,4 +178,5 @@ document.addEventListener('error',e=>{
 },true);
 
 })();
+
 
